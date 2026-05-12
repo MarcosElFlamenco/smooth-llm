@@ -1,6 +1,7 @@
 import torch
 from fastchat.model import get_conversation_template
 from transformers import AutoTokenizer, AutoModelForCausalLM
+from pathlib import Path
 
 class LLM:
 
@@ -20,7 +21,8 @@ class LLM:
             torch_dtype=torch.float16,
             trust_remote_code=True,
             low_cpu_mem_usage=True,
-            use_cache=True
+            use_cache=True,
+            local_files_only=True
         ).to(device).eval()
 
         # Tokenizer
