@@ -2,7 +2,7 @@
 MODEL_NAME = lmsys/vicuna-13b-v1.5
 
 download_model:
-	hf download $(MODEL_NAME) --local-dir ./LLMs/$(MODEL_NAME)
+	hf download $(MODEL_NAME)
 
 
 TARGET_MODEL = llama2
