@@ -44,12 +44,12 @@ def main(args):
     for i, prompt in tqdm(enumerate(attack.prompts)):
         output = defense(prompt)
         jb = defense.is_jailbroken(output)
-        # According to the naming this jb should be a boolean
-        print(jb)
-
         jailbroken_results.append(jb)
-        # So this will be a list of booleans
-
+        if args.verbose:
+            print(f"ADVERSARIAL PROMPT:\n {prompt}")
+            print(f"OUTPUT: \n{output}")
+            print(f"JAILBROKEN: \n {jb}")
+    print(jailbroken_results)
     num_errors = sum(jailbroken_results)
     print(f'We made {num_errors} errors')
 
@@ -114,6 +114,11 @@ if __name__ == '__main__':
         type=int,
         default=10
     )
+    parser.add_argument(
+        '--verbose',
+        action="store_true"
+    )
+
     parser.add_argument(
         '--smoothllm_pert_type',
         type=str,

@@ -15,4 +15,5 @@ smooth_llm:
 		--attack_logfile data/GCG/llama2_behaviors.json \
 		--smoothllm_pert_type RandomSwapPerturbation \
 		--smoothllm_pert_pct 10 \
-		--smoothllm_num_copies 10
+		--smoothllm_num_copies 10 \
+		--verbose
