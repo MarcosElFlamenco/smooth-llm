@@ -46,10 +46,9 @@ def main(args):
         jb = defense.is_jailbroken(output)
         jailbroken_results.append(jb)
         if args.verbose:
-            print(f"ADVERSARIAL PROMPT:\n {prompt}")
+            print(f"ADVERSARIAL PROMPT:\n {prompt.perturbable_prompt}")
             print(f"OUTPUT: \n{output}")
             print(f"JAILBROKEN: \n {jb}")
-    print(jailbroken_results)
     num_errors = sum(jailbroken_results)
     print(f'We made {num_errors} errors')
 
