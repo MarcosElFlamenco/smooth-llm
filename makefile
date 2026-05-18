@@ -1,5 +1,6 @@
 
-MODEL_NAME = lmsys/vicuna-13b-v1.5
+MODEL_NAME = meta-llama/Llama-2-7b-chat-hf
+
 
 download_model:
 	hf download $(MODEL_NAME)
