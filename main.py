@@ -23,7 +23,8 @@ def main(args):
         model_path=config['model_path'],
         tokenizer_path=config['tokenizer_path'],
         conv_template_name=config['conversation_template'],
-        device=device
+        device=device,
+        local_files_only=True
     )
 
     # Create SmoothLLM instance
