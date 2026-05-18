@@ -8,6 +8,14 @@ download_model:
 
 TARGET_MODEL = llama2
 
+no_defense_llm:
+	python main.py \
+		--results_dir ./results \
+		--target_model $(TARGET_MODEL) \
+		--attack GCG \
+		--attack_logfile data/GCG/llama2_behaviors_mini.json \
+		--verbose
+
 smooth_llm:
 	python main.py \
 		--results_dir ./results \

@@ -137,7 +137,7 @@ class SmoothLLM(Defense):
 
 
 
-class SmoothLLM_MV(Defense):
+class MajorityVote_SmoothLLM(Defense):
 
     """SmoothLLM defense.
     
@@ -154,7 +154,7 @@ class SmoothLLM_MV(Defense):
         pert_pct,
         num_copies
     ):
-        super(SmoothLLM, self).__init__(target_model)
+        super(MajorityVote_SmoothLLM, self).__init__(target_model)
         
         self.num_copies = num_copies
         self.perturbation_fn = vars(perturbations)[pert_type](
@@ -187,6 +187,8 @@ class SmoothLLM_MV(Defense):
             print(f'defenses 151: batch outputs is {batch_outputs}')
             output = max(set(batch_outputs), key=batch_outputs.count)
             outputs.append(output)
+            print(f"The voted output is {output}")
+            print(f"Output list is {outputs}")
             torch.cuda.empty_cache()
         ## Unsafe code from here
 

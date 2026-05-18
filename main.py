@@ -4,15 +4,17 @@ import numpy as np
 import pandas as pd
 from tqdm.auto import tqdm
 import argparse
+import time
 
 import lib.perturbations as perturbations
+from lib.defense_factory import get_defense
 import lib.defenses as defenses
 import lib.attacks as attacks
 import lib.language_models as language_models
 import lib.model_configs as model_configs
 
 def main(args):
-
+    start_time = time.time()
     # Create output directories
     os.makedirs(args.results_dir, exist_ok=True)
     
@@ -27,7 +29,8 @@ def main(args):
     )
 
     # Create SmoothLLM instance
-    defense = defenses.SmoothLLM(
+    defense = get_defense(
+        defense_type='smoothllm',
         target_model=target_model,
         pert_type=args.smoothllm_pert_type,
         pert_pct=args.smoothllm_pert_pct,
@@ -65,6 +68,9 @@ def main(args):
         args.results_dir, 'summary.pd'
     ))
     print(summary_df)
+
+    end_time = time.time()
+    print(f"Total time taken: {end_time - start_time} seconds")
 
 
 if __name__ == '__main__':
