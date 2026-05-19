@@ -1,6 +1,6 @@
 import torch
 from fastchat.model import get_conversation_template
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig 
 from pathlib import Path
 
 class LLM:
@@ -12,16 +12,23 @@ class LLM:
         model_path, 
         tokenizer_path, 
         conv_template_name,
+        quantize,
         device
     ):
 
         # Language model
+        if quantize: 
+            quant_config = BitsAndBytesConfig(load_in_4bit=True)  # or load_in_8bit=True
+        else:
+            quant_config = None
+
         self.model = AutoModelForCausalLM.from_pretrained(
             model_path,
             dtype=torch.float16,
             trust_remote_code=True,
             low_cpu_mem_usage=True,
             use_cache=True,
+            quantization_config=quant_config,
             local_files_only=True
         ).to(device).eval()
 

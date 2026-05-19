@@ -21,21 +21,23 @@ def main(args):
     # Instantiate the targeted LLM
     config = model_configs.MODELS[args.target_model]
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+
     target_model = language_models.LLM(
         model_path=config['model_path'],
         tokenizer_path=config['tokenizer_path'],
         conv_template_name=config['conversation_template'],
+        quantize=args.quantize,
         device=device
-    )
 
+    )
+    print(f"Successfully loaded target model: {args.target_model} on device: {device}")
     # Create SmoothLLM instance
     defense = get_defense(
-        defense_type='smoothllm',
+        defense_type=args.defense_type,
         target_model=target_model,
-        pert_type=args.smoothllm_pert_type,
-        pert_pct=args.smoothllm_pert_pct,
-        num_copies=args.smoothllm_num_copies
+        args=args
     )
+    print(f"Successfully wrapped model in defense {args.defense_type}")
 
     # Create attack instance, used to create prompts
     attack = vars(attacks)[args.attack](
@@ -51,7 +53,7 @@ def main(args):
         if args.verbose:
             print(f"ADVERSARIAL PROMPT:\n {prompt.perturbable_prompt}")
             print(f"OUTPUT: \n{output}")
-            print(f"JAILBROKEN: \n {jb}")
+            print(f"JAILBROKEN: {jb}")
             print(f"-------------------------------------------------\n-------------------------------------------------\n")
     num_errors = sum(jailbroken_results)
     print(f'We made {num_errors} errors')
@@ -124,6 +126,11 @@ if __name__ == '__main__':
         '--verbose',
         action="store_true"
     )
+    parser.add_argument(
+        '--quantize',
+        action="store_true"
+    )
+
 
     parser.add_argument(
         '--smoothllm_pert_type',
@@ -135,6 +142,17 @@ if __name__ == '__main__':
             'RandomInsertPerturbation'
         ]
     )
+
+    parser.add_argument(
+        '--defense_type',
+        type=str,
+        default='SmoothLLM',
+        choices=[
+            'Empty',
+            'SmoothLLM'
+        ]
+    )
+
 
     args = parser.parse_args()
     main(args)

@@ -8,8 +8,9 @@ download_model:
 
 TARGET_MODEL = llama2
 
-no_defense_llm:
+vanilla_inference:
 	python main.py \
+		--defense_type Empty \
 		--results_dir ./results \
 		--target_model $(TARGET_MODEL) \
 		--attack GCG \
@@ -18,6 +19,7 @@ no_defense_llm:
 
 smooth_llm:
 	python main.py \
+		--defense_type SmoothLLM \
 		--results_dir ./results \
 		--target_model $(TARGET_MODEL) \
 		--attack GCG \
