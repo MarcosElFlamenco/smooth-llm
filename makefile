@@ -7,6 +7,7 @@ download_model:
 
 
 TARGET_MODEL = llama2
+LOG_FILE = data/GCG/llama-2-7b-chat-hf_behaviors.json
 
 vanilla_inference:
 	python main.py \
@@ -15,7 +16,7 @@ vanilla_inference:
 		--target_model $(TARGET_MODEL) \
 		--attack GCG \
 		--quantize \
-		--attack_logfile data/GCG/llama-2-7b-chat-hf_behaviors.json \
+		--attack_logfile $(LOG_FILE) \
 		--verbose
 
 smooth_llm:
@@ -25,7 +26,7 @@ smooth_llm:
 		--target_model $(TARGET_MODEL) \
 		--attack GCG \
 		--quantize \
-		--attack_logfile data/GCG/llama-2-7b-chat-hf_behaviors.json \
+		--attack_logfile $(LOG_FILE) \
 		--smoothllm_pert_type RandomSwapPerturbation \
 		--smoothllm_pert_pct 10 \
 		--smoothllm_num_copies 3 \
