@@ -10,6 +10,8 @@ def generate(model, tokenizer, input_ids, assistant_role_slice, gen_config=None)
     if gen_config is None:
         gen_config = model.generation_config
         gen_config.max_new_tokens = 64
+    if input_ids.dim() > 1:
+        input_ids = input_ids.squeeze(0)
     input_ids = input_ids[:assistant_role_slice.stop].to(model.device).unsqueeze(0)
     attn_masks = torch.ones_like(input_ids).to(model.device)
     output_ids = model.generate(
@@ -65,18 +67,21 @@ class Empty(Defense):
     @torch.no_grad()
     def __call__(self, prompt, batch_size=64, max_new_len=64):
 
-        input_ids = self.target_model.tokenizer(
-            prompt.full_prompt,
-            return_tensors='pt'
-        ).input_ids.to(self.target_model.model.device)
-        assistant_role_slice = slice(None, input_ids.shape[-1])
+        input_ids = torch.tensor(
+            self.target_model.tokenizer(prompt.full_prompt).input_ids,
+            device=self.target_model.model.device,
+        )
+        assistant_role_slice = slice(None, len(input_ids))
+
+        gen_config = self.target_model.model.generation_config
+        gen_config.max_new_tokens = max_new_len
 
         output_ids = generate(
             self.target_model.model,
             self.target_model.tokenizer,
             input_ids,
             assistant_role_slice,
-            gen_config=self.target_model.model.generation_config,
+            gen_config=gen_config,
         )
 
         return self.target_model.tokenizer.decode(output_ids).strip()
