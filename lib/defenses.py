@@ -5,6 +5,24 @@ import numpy as np
 
 import lib.perturbations as perturbations
 
+
+def generate(model, tokenizer, input_ids, assistant_role_slice, gen_config=None):
+    if gen_config is None:
+        gen_config = model.generation_config
+        gen_config.max_new_tokens = 64
+    input_ids = input_ids[:assistant_role_slice.stop].to(model.device).unsqueeze(0)
+    attn_masks = torch.ones_like(input_ids).to(model.device)
+    output_ids = model.generate(
+        input_ids,
+        attention_mask=attn_masks,
+        generation_config=gen_config,
+        pad_token_id=tokenizer.pad_token_id,
+        top_p=0.9,
+        do_sample=True,
+        temperature=0.7,
+    )[0]
+    return output_ids[assistant_role_slice.stop:]
+
 class Defense:
 
     TEST_PREFIXES = [
@@ -51,25 +69,17 @@ class Empty(Defense):
             prompt.full_prompt,
             return_tensors='pt'
         ).input_ids.to(self.target_model.model.device)
-        attn_masks = torch.ones_like(input_ids).to(self.target_model.model.device)
+        assistant_role_slice = slice(None, input_ids.shape[-1])
 
-        gen_config = self.target_model.model.generation_config
-        gen_config.max_new_tokens = max_new_len
-
-        output_ids = self.target_model.model.generate(
+        output_ids = generate(
+            self.target_model.model,
+            self.target_model.tokenizer,
             input_ids,
-            attention_mask=attn_masks,
-            generation_config=gen_config,
-            pad_token_id=self.target_model.tokenizer.pad_token_id,
-            top_p=0.9,
-            do_sample=True,
-            temperature=0.7,
-        )[0]
+            assistant_role_slice,
+            gen_config=self.target_model.model.generation_config,
+        )
 
-        return self.target_model.tokenizer.decode(
-            output_ids[input_ids.shape[-1]:],
-            skip_special_tokens=True
-        ).strip()
+        return self.target_model.tokenizer.decode(output_ids).strip()
 
 
 
