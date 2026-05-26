@@ -22,6 +22,12 @@ from utils.string_utils import load_conversation_template
 from utils.eval_utils import check_for_attack_success, set_seed
 from utils.references import MODEL_PATH_DICTS
 
+def get_attack_data(attack_data_path):
+    with open(attack_data_path, "r") as f:
+        artifact_dataset = json.load(f)
+    return artifact_dataset
+
+
 def main(args):
     start_time = time.time()
 
@@ -53,22 +59,24 @@ def main(args):
         args=args
     )
 
-    
-    ##artifact load
-    path = "results/autodan_hga/llama2_0_normal.json"
-
-    with open(path, "r") as f:
-        artifact_dataset = json.load(f)
-    example = artifact_dataset["0"]
-    goal = example["goal"]
-    target = example["target"]
-    adv_suffix = example["final_suffix"]
-
+    attack_data_path = "results/autodan_hga/llama2_0_normal.json"
+    attack_data = get_attack_data(attack_data_path)    
     start_time = time.time()
-    output = defense(goal, target, adv_suffix, batch_size=64, max_new_len=64)
-    inference_time = time.time() - start_time
-    print(f"Output: {output}")
-    print(f"Inference time: {inference_time} seconds")
+    artifact_start_time = start_time
+    for i, artifact in enumerate(attack_data.values()):
+        print(f"Evaluating artifact {i}...")
+        output = defense(goal = artifact["goal"],
+                         target=artifact["target"], 
+                         adv_suffix=artifact["final_suffix"], 
+                         batch_size=64, 
+                         max_new_len=64)
+
+        artifact_inference_time = time.time() - artifact_start_time
+        artifact_start_time = time.time()
+        print(f"Output: {output}")
+        print(f"Inference time: {artifact_inference_time} seconds")
+
+    print(f"Total inference time: {time.time() - start_time} seconds")
 
 
  
