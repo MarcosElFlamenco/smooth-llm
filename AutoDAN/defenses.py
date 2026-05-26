@@ -66,15 +66,6 @@ class NoDefense(Defense):
             suffix_manager._assistant_role_slice,
         )
 
-        print(
-            "################################\n"
-            f"Current Goal: {goal}\n"
-            f"Passed:{is_success}\n"
-            f"Current Suffix:\n{adv_suffix}\n"
-            f"Current Response:\n{gen_str}\n"
-            "################################\n"
-        )
-
         gc.collect()
         torch.cuda.empty_cache()
         return gen_str
