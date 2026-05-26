@@ -63,7 +63,7 @@ def main(args):
     jailbreak_evaluator = SyntaxicEvaluator()
     print(f"Using jailbreak evaluator: {jailbreak_evaluator.__class__.__name__}")
 
-    attack_data_path = "results/autodan_hga/llama2_0_normal.json"
+    attack_data_path = "AutoDAN/results/autodan_hga/llama2_0_normal.json"
     attack_data = get_attack_data(attack_data_path)    
     num_jailbroken = 0
 

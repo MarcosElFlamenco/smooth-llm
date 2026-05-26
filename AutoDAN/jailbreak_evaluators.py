@@ -1,4 +1,4 @@
-from utils.refences import TEST_PREFIXES
+from utils.references import TEST_PREFIXES
 
 
 class SyntaxicEvaluator:
