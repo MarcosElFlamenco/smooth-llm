@@ -31,3 +31,7 @@ smooth_llm:
 		--smoothllm_pert_pct 10 \
 		--smoothllm_num_copies 3 \
 		--verbose
+
+
+generate_behavior_files:
+	python generate_behavior_files.py
