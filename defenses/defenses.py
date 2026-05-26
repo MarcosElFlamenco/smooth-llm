@@ -1,10 +1,10 @@
 import torch
 import numpy as np
 import gc
-from utils.string_utils import autodan_SuffixManager
+from AutoDAN.utils.string_utils import autodan_SuffixManager
+from AutoDAN.utils.eval_utils import check_for_attack_success
 #import lib.perturbations as perturbations
 
-from utils.eval_utils import check_for_attack_success
 
 class Defense:
 

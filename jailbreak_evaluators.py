@@ -1,3 +1,6 @@
+## Very important note: This is the paper-writer's approximation of weather the output is a jailbreak
+## Thought the logic is currently identical, it should not be confused with the jailbreaker's evaluation of his success
+
 from utils.references import TEST_PREFIXES
 
 

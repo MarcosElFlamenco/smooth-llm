@@ -1,5 +1,5 @@
 # defense_factory.py
-from defenses import NoDefense
+from defenses.defenses import NoDefense
 
 DEFENSE_REGISTRY = {
     "nodefense": NoDefense 

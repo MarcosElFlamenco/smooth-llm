@@ -1,4 +1,6 @@
+import sys
 import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "AutoDAN"))
 import torch
 import pandas as pd
 import json
@@ -12,7 +14,7 @@ import time
 #import lib.attacks as attacks
 #import lib.language_models as language_models
 #import lib.model_configs as model_configs
-from defense_factory import get_defense
+from defenses.defense_factory import get_defense
 
 import numpy as np
 import torch.nn as nn
