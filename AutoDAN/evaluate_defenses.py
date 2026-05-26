@@ -55,7 +55,8 @@ def main(args):
 
     
     ##artifact load
-    path = "results/autodan_ga/llama2_0_normal.json" if attack_mode == "ga" else "results/autodan_hga/llama2_0_normal.json"
+    path = "results/autodan_hga/llama2_0_normal.json"
+
     with open(path, "r") as f:
         artifact_dataset = json.load(f)
     example = artifact_dataset["0"]

@@ -44,8 +44,10 @@ class NoDefense(Defense):
 
     def __init__(self, 
         target_model,
+        tokenizer,
+        conv_template
     ):
-        super(NoDefense, self).__init__(target_model)
+        super(NoDefense, self).__init__(target_model,tokenizer, conv_template)
 
     @torch.no_grad()
     def __call__(self, goal, target, adv_suffix, batch_size=64, max_new_len=64):
