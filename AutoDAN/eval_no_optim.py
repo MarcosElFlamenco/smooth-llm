@@ -281,7 +281,7 @@ def run_eval(args, attack_mode="ga"):
             "################################\n"
             f"Current Goal: {goal}\n"
             f"Passed:{is_success}\n"
-            f"Current Suffix:\n{best_new_adv_suffix}\n"
+            f"Current Suffix:\n{adv_suffix}\n"
             f"Current Response:\n{gen_str}\n"
             "################################\n"
         )
