@@ -29,6 +29,8 @@ from utils.eval_utils import check_for_attack_success
 
 ##CODE START
 
+SEED=20
+
 def set_seed(seed=SEED):
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -164,6 +166,7 @@ if __name__ == '__main__':
         ]
     )
 
+    parser.add_argument("--device", type=int, default=0)
 
     args = parser.parse_args()
     main(args)

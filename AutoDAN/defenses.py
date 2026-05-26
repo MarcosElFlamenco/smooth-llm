@@ -2,8 +2,7 @@ import torch
 import numpy as np
 import gc
 from utils.string_utils import autodan_SuffixManager
-import lib.perturbations as perturbations
-from AutoDAN.autodan_hga_eval import generate
+#import lib.perturbations as perturbations
 
 from utils.eval_utils import check_for_attack_success
 
