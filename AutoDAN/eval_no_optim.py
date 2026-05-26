@@ -146,7 +146,6 @@ def run_eval(args, attack_mode="none"):
             tokenizer,
             suffix_manager.get_input_ids(adv_string=adv_suffix).to(device),
             suffix_manager._assistant_role_slice,
-            TEST_PREFIXES,
         )
 
         epoch_cost_time = round(time.time() - start_time, 2)
