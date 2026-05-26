@@ -39,5 +39,5 @@ generate_behavior_files:
 
 dan_vanilla_inference:
 	python AutoDAN/vanilla_inference.py \
-		--input_path data/AutoDAN/llama-2-7b-chat-hf_behaviors.json \
+		--input-path data/AutoDAN/llama-2-7b-chat-hf_behaviors.json
 		
