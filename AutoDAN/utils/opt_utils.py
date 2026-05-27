@@ -15,7 +15,7 @@ from collections import defaultdict, OrderedDict
 from utils.string_utils import autodan_SuffixManager
 import sys
 import time
-logging.set_verbosity_error() 
+#logging.set_verbosity_error() 
 
 def forward(*, model, input_ids, attention_mask, batch_size=512):
     logits = []

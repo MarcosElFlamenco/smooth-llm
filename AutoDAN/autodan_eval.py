@@ -1,7 +1,3 @@
-## This suppresses a warning about duplicate arguments
-import warnings
-warnings.filterwarnings("ignore", message=".*max_new_tokens.*max_length.*")
-
 import os, sys
 import gc
 import json

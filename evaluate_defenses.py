@@ -9,9 +9,6 @@ import time
 from tqdm.auto import tqdm
 import argparse
 import time
-## This suppresses a warning about duplicate arguments
-import warnings
-warnings.filterwarnings("ignore", message=".*max_new_tokens.*max_length.*")
 #import lib.perturbations as perturbations
 #import lib.attacks as attacks
 #import lib.language_models as language_models
