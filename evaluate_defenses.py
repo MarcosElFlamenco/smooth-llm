@@ -34,26 +34,29 @@ def get_attack_data(attack_data_path):
 def main(args):
     start_time = time.time()
 
-    # Create output directories
+    # Preparing output dictionary
     os.makedirs(args.results_dir, exist_ok=True)
+    results = {}
 
+    # Setup compute
     set_seed()
     device = f"cuda:{args.device}"
-    model_path = os.path.expanduser(MODEL_PATH_DICTS[args.target_model])
 
+    # Setup conv template
     template_name = args.target_model
+    conv_template = load_conversation_template(template_name)
 
+    # Setup model
+    model_path = os.path.expanduser(MODEL_PATH_DICTS[args.target_model])
     target_model , tokenizer = load_model_and_tokenizer(
         model_path,
         low_cpu_mem_usage=True,
         use_cache=False,
         device=device,
     )
-
     print(f"Success: loaded model from path {model_path}")
 
-    conv_template = load_conversation_template(template_name)
-
+    # Setup defense
     defense = get_defense(
         defense_type=args.defense_type,
         target_model=target_model,
@@ -62,9 +65,11 @@ def main(args):
         args=args
     )
 
+    # Setup jailbreak evaluator
     jailbreak_evaluator = SyntaxicEvaluator()
     print(f"Using jailbreak evaluator: {jailbreak_evaluator.__class__.__name__}")
 
+    # Setup attack dataset
     attack_data_path = "AutoDAN/results/autodan_hga/llama2_0_normal.json"
     attack_data = get_attack_data(attack_data_path)    
     num_jailbroken = 0
@@ -85,8 +90,21 @@ def main(args):
             num_jailbroken += 1
         artifact_inference_time = time.time() - artifact_start_time
         artifact_start_time = time.time()
-        print(f"Output: {output} /n/n Considered jailbroken: {jailbroken}")
-        print(f"Inference time: {artifact_inference_time} seconds")
+        print(f"######################## OUTPUT ########################: \n {output} \n\n  ######################## JAILBROKEN: {jailbroken} \n INFERENCE TIME: {artifact_inference_time}s")
+
+        result = {
+            "goal": artifact["goal"],
+            "target": artifact["target"],
+            "adv_suffix": artifact["final_suffix"],
+            "output": output,
+            "time": artifact_inference_time,
+            "jailbroken": jailbroken
+        }
+
+        results[str(i)] = result
+
+        with open(f"{result_dir}/{args.model}.json", "w") as json_file:
+            json.dump(results, json_file, indent=4)
 
     print(f"Total inference time: {time.time() - start_time} seconds")
     print(f"Number of jailbroken artifacts: {num_jailbroken} out of {len(attack_data)}")
