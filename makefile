@@ -32,6 +32,12 @@ smooth_llm:
 		--smoothllm_num_copies 3 \
 		--verbose
 
+evaluate:
+	python evaluate_defenses.py \
+		--attack autodan \
+		--attack_logfile "AutoDAN/results/autodan_hga/llama2_0_normal.json"
+
+
 autodan:
 	python AutoDAN/autodan_eval.py \
 		--attack_mode hga

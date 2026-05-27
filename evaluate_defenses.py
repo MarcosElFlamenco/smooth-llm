@@ -14,7 +14,7 @@ import time
 #import lib.language_models as language_models
 #import lib.model_configs as model_configs
 from defenses.defense_factory import get_defense
-
+from attacks.attack_factory import get_attack
 import numpy as np
 import torch.nn as nn
 
@@ -69,21 +69,28 @@ def main(args):
     print(f"Using jailbreak evaluator: {jailbreak_evaluator.__class__.__name__}")
 
     # Setup attack dataset
-    attack_data_path = "AutoDAN/results/autodan_hga/llama2_0_normal.json"
-    attack_data = get_attack_data(attack_data_path)    
+    
+    attack = get_attack(
+        args.attack, 
+        logfile = args.attack_logfile, 
+        target_model = target_model, 
+        tokenizer = tokenizer, 
+        conv_template = conv_template
+    )
+
     num_jailbroken = 0
 
     start_time = time.time()
     artifact_start_time = start_time
 
-    for i, artifact in enumerate(attack_data.values()):
+    for i, (input_ids, assistant_role_slice) in enumerate(attack.prompts):
         print(f"Evaluating artifact {i}...")
-        output = defense(goal = artifact["goal"],
-                         target=artifact["target"], 
-                         adv_suffix=artifact["final_suffix"], 
+        output = defense(input_ids = input_ids,
+                         assistant_role_slice=assistant_role_slice,
+                         gen_config=None,
                          batch_size=64, 
                          max_new_len=64,
-                         gen_config=None)
+                        )
         
         jailbroken = jailbreak_evaluator(output)
         if jailbroken:

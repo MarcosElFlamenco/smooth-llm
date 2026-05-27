@@ -50,20 +50,14 @@ class NoDefense(Defense):
         super(NoDefense, self).__init__(target_model,tokenizer, conv_template)
 
     @torch.no_grad()
-    def __call__(self, goal, target, adv_suffix, gen_config, batch_size=64, max_new_len=64):
-        suffix_manager = autodan_SuffixManager(
-            tokenizer=self.tokenizer,
-            conv_template=self.conv_template,
-            instruction=goal,
-            target=target,
-            adv_string=adv_suffix,
-        )
+    def __call__(self, input_ids, assistant_role_slice, gen_config, batch_size=64, max_new_len=64):
+
         gen_str = self.tokenizer.decode(
             generate(
                 self.target_model,
                 self.tokenizer,
-                suffix_manager.get_input_ids(adv_string=adv_suffix).to(self.target_model.device),
-                suffix_manager._assistant_role_slice,
+                input_ids,
+                assistant_role_slice,
                 gen_config=gen_config,
             )
         ).strip()
