@@ -9,6 +9,7 @@ smoothing_ASR.png
 lib/model_configs.py
 
 .venv
+new_env
 AutoDAN/autoDanEnv
 
 AutoDAN/__init__.py
