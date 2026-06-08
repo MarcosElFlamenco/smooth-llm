@@ -1,3 +1,5 @@
+## This is sample code to test the package easyjailbreak
+## It didn't work comfortably, i'm giving up this idea for now
 from easyjailbreak.attacker.PAIR_chao_2023 import PAIR
 from easyjailbreak.datasets import JailbreakDataset
 from easyjailbreak.models.huggingface_model import from_pretrained

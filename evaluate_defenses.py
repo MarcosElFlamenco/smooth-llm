@@ -89,7 +89,7 @@ def main(args):
                          assistant_role_slice=assistant_role_slice,
                          gen_config=None,
                          batch_size=64, 
-                         max_new_len=64,
+                         max_new_len=args.max_new_len,
                         )
         
         jailbroken = jailbreak_evaluator(output)
@@ -205,6 +205,13 @@ if __name__ == '__main__':
         type=int, 
         default=0
     )
+
+    parser.add_argument(
+        "--max_new_len", 
+        type=int, 
+        default=64
+    )
+
 
     args = parser.parse_args()
     main(args)
