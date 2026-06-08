@@ -83,13 +83,14 @@ def main(args):
     start_time = time.time()
     artifact_start_time = start_time
 
-    for i, (input_ids, assistant_role_slice) in enumerate(attack.prompts):
+    for i, prompt in enumerate(attack.prompts):
         print(f"Evaluating artifact {i}...")
-        output = defense(input_ids = input_ids,
-                         assistant_role_slice=assistant_role_slice,
+        print(f"Assistant role slice is {prompt.assistant_role_slice}")
+        output = defense(input_ids = prompt.input_ids,
+                         assistant_role_slice=prompt.assistant_role_slice,
                          gen_config=None,
                          batch_size=64, 
-                         max_new_len=64,
+                         max_new_len=args.max_new_len,
                         )
         
         jailbroken = jailbreak_evaluator(output)
@@ -100,9 +101,9 @@ def main(args):
         print(f"######################## OUTPUT ########################: \n {output} \n\n  ######################## JAILBROKEN: {jailbroken} \n INFERENCE TIME: {artifact_inference_time}s")
 
         result = {
-            "goal": artifact["goal"],
-            "target": artifact["target"],
-            "adv_suffix": artifact["final_suffix"],
+            "goal": prompt.goal,
+            "target": prompt.target,
+            "adv_suffix": prompt.final_suffix,
             "output": output,
             "time": artifact_inference_time,
             "jailbroken": jailbroken
@@ -110,7 +111,7 @@ def main(args):
 
         results[str(i)] = result
 
-        with open(f"{args.result_dir}/{args.model}.json", "w") as json_file:
+        with open(f"{args.results_dir}/{args.target_model}.json", "w") as json_file:
             json.dump(results, json_file, indent=4)
 
     print(f"Total inference time: {time.time() - start_time} seconds")
@@ -205,6 +206,13 @@ if __name__ == '__main__':
         type=int, 
         default=0
     )
+
+    parser.add_argument(
+        "--max_new_len", 
+        type=int, 
+        default=64
+    )
+
 
     args = parser.parse_args()
     main(args)

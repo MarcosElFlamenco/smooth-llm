@@ -117,7 +117,6 @@ class autodan_SuffixManager:
 
     def get_input_ids(self, adv_string=None):
         prompt = self.get_prompt(adv_string=adv_string)
-        print(f'The suffix manager got the prompt and output this: {prompt}')
         toks = self.tokenizer(prompt).input_ids
         input_ids = torch.tensor(toks[:self._target_slice.stop])
 
