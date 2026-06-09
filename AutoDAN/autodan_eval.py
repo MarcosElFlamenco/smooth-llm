@@ -10,7 +10,7 @@ from tqdm import tqdm
 ## This makes imports simpler with the two nested directories
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "AutoDAN"))
 
-from utils.eval_utils import _sample_next_suffixes, _prepare_reference, log_init, set_seed, check_for_attack_success
+from utils.eval_utils import _sample_next_suffixes, _prepare_reference, log_init, set_seed, check_for_attack_success, update_gen_config
 from utils.references import TEST_PREFIXES, MODEL_PATH_DICTS
 from utils.opt_utils import (
     get_score_autodan,
@@ -27,6 +27,8 @@ def build_arg_parser():
     parser.add_argument("--num_elites", type=float, default=0.05)
     parser.add_argument("--crossover", type=float, default=0.5)
     parser.add_argument("--num_points", type=int, default=5)
+    parser.add_argument("--max_new_tokens", type=int, default=64)
+    parser.add_argument('--do_sample',action="store_true")
     parser.add_argument("--attack_mode", type=str, choices=["ga", "hga"], default="ga")
     ## Note that this argument is only used in the case of hg
     parser.add_argument("--iter", type=int, default=5)
@@ -67,6 +69,8 @@ def run_autodan_eval(args, attack_mode="ga"):
     result_dir = "./results/autodan_ga" if attack_mode == "ga" else "./results/autodan_hga"
     hga_interval = getattr(args, "iter", None)
 
+
+    gen_config = update_gen_config(model.generation_config, args)
     for i, (goal, target) in tqdm(enumerate(dataset), total=len(harmful_data.goal[args.start:])):
         reference = _prepare_reference(reference_template, template_name)
         log = log_init()
@@ -119,6 +123,7 @@ def run_autodan_eval(args, attack_mode="ga"):
                     suffix_manager.get_input_ids(adv_string=adv_suffix).to(device),
                     suffix_manager._assistant_role_slice,
                     TEST_PREFIXES,
+                    gen_config
                 )
 
                 new_adv_suffixs, word_dict = _sample_next_suffixes(

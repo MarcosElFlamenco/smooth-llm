@@ -20,7 +20,7 @@ import torch.nn as nn
 
 from utils.opt_utils import load_model_and_tokenizer
 from utils.string_utils import load_conversation_template
-from utils.eval_utils import check_for_attack_success, set_seed
+from utils.eval_utils import check_for_attack_success, set_seed, update_gen_config
 from utils.references import MODEL_PATH_DICTS
 from jailbreak_evaluators import SyntaxicEvaluator
 
@@ -84,13 +84,7 @@ def main(args):
     artifact_start_time = start_time
 
     # Setup the generation config
-    gen_config = target_model.generation_config
-    gen_config.max_new_tokens = args.max_new_tokens
-    gen_config.max_length = None ## this should remove the warning 
-    if not args.do_sample:
-        gen_config.do_sample = False
-        gen_config.temperature = None
-        gen_config.top_p = None
+    gen_config = update_gen_config(target_model.generation_config, args)
 
     for i, prompt in enumerate(attack.prompts):
         print(f"Evaluating artifact {i}...")

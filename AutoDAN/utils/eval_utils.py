@@ -25,6 +25,16 @@ def set_seed(seed=SEED):
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
 
+def update_gen_config(gen_config, args):
+    gen_config.max_new_tokens = args.max_new_tokens
+    gen_config.max_length = None
+    if args.do_sample == False:
+        gen_config.do_sample = False
+        gen_config.temperature = None
+        gen_config.top_p = None
+    return gen_config
+
+
 def get_developer(model_name):
     return DEVELOPER_DICT[model_name]
 
