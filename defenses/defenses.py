@@ -50,7 +50,7 @@ class NoDefense(Defense):
         super(NoDefense, self).__init__(target_model,tokenizer, conv_template)
 
     @torch.no_grad()
-    def __call__(self, input_ids, assistant_role_slice, gen_config, batch_size=64, max_new_len=64):
+    def __call__(self, input_ids, assistant_role_slice, gen_config, batch_size=64):
 
         gen_str = self.tokenizer.decode(
             generate(
@@ -58,7 +58,7 @@ class NoDefense(Defense):
                 self.tokenizer,
                 input_ids,
                 assistant_role_slice,
-                gen_config=gen_config,
+                gen_config=gen_config
             )
         ).strip()
 

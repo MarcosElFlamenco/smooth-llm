@@ -83,14 +83,19 @@ def main(args):
     start_time = time.time()
     artifact_start_time = start_time
 
+    # Setup the generation config
+    gen_config = target_model.generation_config
+    gen_config.max_new_tokens = args.max_new_tokens
+    gen_config.do_sample = args.do_sample
+    gen_config.max_length = None ## this should remove the warning 
+
     for i, prompt in enumerate(attack.prompts):
         print(f"Evaluating artifact {i}...")
         print(f"Assistant role slice is {prompt.assistant_role_slice}")
         output = defense(input_ids = prompt.input_ids,
                          assistant_role_slice=prompt.assistant_role_slice,
-                         gen_config=None,
+                         gen_config=gen_config,
                          batch_size=64, 
-                         max_new_len=args.max_new_len,
                         )
         
         jailbroken = jailbreak_evaluator(output)
@@ -176,6 +181,11 @@ if __name__ == '__main__':
         action="store_true"
     )
     parser.add_argument(
+        '--do_sample',
+        action="store_true"
+    )
+
+    parser.add_argument(
         '--quantize',
         action="store_true"
     )
@@ -208,7 +218,7 @@ if __name__ == '__main__':
     )
 
     parser.add_argument(
-        "--max_new_len", 
+        "--max_new_tokens", 
         type=int, 
         default=64
     )
