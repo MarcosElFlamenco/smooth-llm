@@ -38,12 +38,13 @@ evaluate:
 	python evaluate_defenses.py \
 		--attack $(ATTACK) \
 		--attack_logfile "AutoDAN/results/autodan_hga/llama2_0_normal.json" \
-		--max_new_tokens 128
+		--max_new_tokens 512
 
 
 autodan:
 	python AutoDAN/autodan_eval.py \
-		--attack_mode hga
+		--attack_mode hga \
+		--max_new_tokens 128
 
 generate_behavior_files:
 	python generate_behavior_files.py
