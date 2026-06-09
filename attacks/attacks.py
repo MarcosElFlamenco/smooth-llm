@@ -53,11 +53,11 @@ class AutoDAN(Attack):
 
         # Enables obj[i]
         self.prompts = [
-            self.create_prompt(artifact["goal"], artifact["target"], artifact["final_suffix"])
+            self.create_prompt(goal=artifact["goal"], target=artifact["target"], final_suffix=artifact["final_suffix"])
             for artifact in log.values()
         ]
 
-    def create_prompt(self, goal, final_suffix, target, max_new_len=100):
+    def create_prompt(self, goal, target, final_suffix):
 
         suffix_manager = autodan_SuffixManager(
             tokenizer=self.tokenizer,
@@ -66,7 +66,7 @@ class AutoDAN(Attack):
             target=target,
             adv_string=final_suffix,
         )
-        ##TODO break this function in to so as to have the textual input
+
         prompt = suffix_manager.get_prompt(adv_string=final_suffix)
         input_ids = suffix_manager.get_input_ids_from_prompt(text_prompt=prompt).to(self.target_model.device)
         assistant_role_slice = suffix_manager._assistant_role_slice
