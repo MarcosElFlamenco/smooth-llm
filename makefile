@@ -38,7 +38,7 @@ evaluate:
 	python evaluate_defenses.py \
 		--attack $(ATTACK) \
 		--attack_logfile "AutoDAN/results/autodan_hga/llama2_0_normal.json" \
-		--max_new_len 128
+		--max_new_tokens 128
 
 
 autodan:
