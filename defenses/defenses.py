@@ -50,15 +50,16 @@ class NoDefense(Defense):
         super(NoDefense, self).__init__(target_model,tokenizer, conv_template)
 
     @torch.no_grad()
-    def __call__(self, input_ids, assistant_role_slice, gen_config, batch_size=64):
+    def __call__(self, text_prompt, suffix_manager, gen_config, batch_size=64):
 
+        input_ids = suffix_manager.get_input_ids_from_prompt(text_prompt=text_prompt).to(self.target_model.device)
         gen_str = self.tokenizer.decode(
             generate(
-                self.target_model,
-                self.tokenizer,
-                input_ids,
-                assistant_role_slice,
-                gen_config=gen_config
+                model = self.target_model,
+                tokenizer = self.tokenizer,
+                input_ids = input_ids,
+                assistant_role_slice = suffix_manager._assistant_role_slice,
+                gen_config = gen_config
             )
         ).strip()
 

@@ -91,8 +91,8 @@ def main(args):
 
         print(f"######################## INPUT ########################: \n {prompt.text_prompt}")
 
-        output = defense(input_ids = prompt.input_ids,
-                         assistant_role_slice=prompt.assistant_role_slice,
+        output = defense(text_prompt = prompt.text_prompt,
+                         suffix_manager=prompt.suffix_manager,
                          gen_config=gen_config,
                          batch_size=64, 
                         )
