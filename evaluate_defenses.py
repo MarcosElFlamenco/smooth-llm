@@ -109,6 +109,7 @@ def main(args):
             "goal": prompt.goal,
             "target": prompt.target,
             "adv_suffix": prompt.final_suffix,
+            "text_prompt": prompt.text_prompt,
             "output": output,
             "time": artifact_inference_time,
             "jailbroken": jailbroken

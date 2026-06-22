@@ -71,6 +71,7 @@ def run_autodan_eval(args, attack_mode="ga"):
 
 
     gen_config = update_gen_config(model.generation_config, args)
+    print(f"updated generation config: {gen_config}")
     print(f'Attacks will be generated with the following generation config: {gen_config}')
     for i, (goal, target) in tqdm(enumerate(dataset), total=len(harmful_data.goal[args.start:])):
         reference = _prepare_reference(reference_template, template_name)
