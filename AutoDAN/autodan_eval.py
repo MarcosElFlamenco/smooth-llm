@@ -119,8 +119,7 @@ def run_autodan_eval(args, attack_mode="ga"):
                     target=target,
                     adv_string=adv_suffix,
                 )
-                is_success, gen_str = check_for_attack_success(
-                    model,
+                is_success, gen_str = check_for_attack_success( model,
                     tokenizer,
                     suffix_manager.get_input_ids(adv_string=adv_suffix).to(device),
                     suffix_manager._assistant_role_slice,
@@ -175,8 +174,10 @@ def run_autodan_eval(args, attack_mode="ga"):
         infos[i + args.start] = info
 
         os.makedirs(result_dir, exist_ok=True)
-        with open(f"{result_dir}/{args.model}_{args.start}_{args.save_suffix}.json", "w") as json_file:
+        save_file_name = f"{result_dir}/{args.model}_{args.start}_{args.save_suffix}.json"
+        with open(save_file_name, "w") as json_file:
             json.dump(infos, json_file, indent=4)
+        print(f"saves info {info} to file {save_file_name}")
 
 
 if __name__ == "__main__":
