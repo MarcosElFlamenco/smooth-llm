@@ -121,7 +121,7 @@ def main(args):
             json.dump(results, json_file, indent=4)
 
     print(f"Total inference time: {time.time() - start_time} seconds")
-    print(f"Number of jailbroken artifacts: {num_jailbroken} out of {len(attack_data)}")
+    print(f"Number of jailbroken artifacts: {num_jailbroken} out of {len(attack.prompts)}")
 
 
  
