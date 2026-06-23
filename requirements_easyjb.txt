@@ -1,8 +1,0 @@
-torch==2.6.0
-pandas
-fastchat
-psutil
-accelerate
-requests
-transformers
-easyjailbreak

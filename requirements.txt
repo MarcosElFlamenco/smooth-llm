@@ -2,7 +2,7 @@ fschat>=0.2.20
 nltk==3.8.1
 numpy==1.26.2
 openai==0.28.1
-torch==2.11.0
+torch==2.6.0
 tqdm==4.66.1
 transformers
 sentencepiece
